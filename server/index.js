@@ -19,7 +19,7 @@ app.use(cors());
 
 // use mongoDB atlas
 
-const CONNECTION_URL = 'mongodb+srv://Dimitri:qrSCqniBw39PzOlR@cluster0.9rvra.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+const CONNECTION_URL = ''
 const PORT = process.env.PORT || 5000;
 
 // connect to mongo atlas
