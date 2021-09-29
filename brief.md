@@ -37,7 +37,78 @@
       1. app.use(express.json(limit: "30mb"))
       2. app.use(express.urlencoded(limit: "30mb", extended: "true"))
 
-## Database setup (mongoDb atlas)
+### Database setup (mongoDb atlas)
    1. go to mongodb website make an account
    2. Build a cluster
-      1. 
+   3. give database access (dont use special characters or use hex code of that special characcter in password)
+   4. WITHOUT dotenv
+      1. const CONNECTION_URL = 'mongo app connection url, add your password remove <>'
+      2. const PORT = process.env.PORT || 5000;
+   5. Connect to Atlas and check (add a then and catch to show error)
+      ```javascript 
+      mongoose.connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+         .then(() => app.listen(PORT, () => console.log(`Server running on port: ${PORT}`)))
+         .catch((error) => console.log(error.message));
+      ```
+___
+## Setup Folder Structure - for scalability
+
+### Routes folder
+
+   1. setup routes folder
+      1. make a routes folder in server
+      2. make a files posts.js
+         1. import express
+         2. declare a varible to method express.Router()
+         3. make a root get request
+         ```javascript
+            import express from 'express'
+            const router = express.Router()
+            router.get('/', (req, res) => {
+               res.send('THIS WORKS')
+            });
+            export default router;
+         ```
+      3. setup routes in index.js
+         1. import the router file
+         ```javascript
+            import postRoutes from './routes/posts.js';
+
+            const app = express();
+
+            app.use('/posts', postRoutes);
+         ```
+      4. check on localhost:5000/posts
+### Controllers
+
+   1. make a new folder controller in server
+   2. make new file in controller as posts.js
+      ```javacript
+         export const getPosts = (req, res) => {
+            res.send('this works')
+         }
+      ```
+   3. import the posts.js from controllers folder in routes post.js
+      ```javascript
+         import { getPosts } from '../controllers/posts.js';
+         const router =express.Router()
+         router.get('/', getPosts)
+         export default router
+      ```
+
+### Models
+   1. make a models folder in server
+   2. make a file in models PostMessage.js
+   3. import mongoose (since here we are making a mongo schema)
+   4. make a Schema
+   5. make a model through schema
+   6. export model
+   ```javascript
+      import mongoose from 'mongoose'
+      const anotherSchema = mongoose.Schema({
+         key: Type
+      })
+      const Model = mongoose.model('Model', anotherSchema)
+      export default Model
+   ```
+   7. import the Schema into controller to give the logic to create the posts
